@@ -21,5 +21,3 @@ Este projeto atua como o ponto de entrada da arquitetura de microsserviços, uti
 - Spring Boot 3.1+
 - Spring Cloud Gateway
 - Maven 3.9+
-
-Mais informações: [repositório](https://github.com/marcellopedrosa/api-gateway)
