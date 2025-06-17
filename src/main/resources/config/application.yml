@@ -8,6 +8,10 @@ spring:
 
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       server:
         webflux:
           routes:
@@ -23,4 +27,19 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${SPRING_CLOUD_EUREKA_URI_SERVER}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+    org.springframework.boot.autoconfigure.web: DEBUG
+    redisratelimiter: DEBUG
+    reactor.ipc.netty: DEBUG
+    reactor.netty: DEBUG
+    reactor.netty.http.client: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web.reactive.function.client: TRACE
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
