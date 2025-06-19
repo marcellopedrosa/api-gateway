@@ -11,6 +11,27 @@ spring:
       - dev
   cloud:
     gateway:
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedHeaders: "*"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowCredentials: true
+          routes:
+          - id: teste
+            uri: https://httpbin.org
+            predicates:
+            - Path=/get
+            filters:
+            - AddRequestHeader=X-Test, SpringCloudGateway
       x-forwarded:
         enabled: true
         host-enabled: true
@@ -25,13 +46,6 @@ spring:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - TokenRelay=
         - SaveSession
-
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods: "*"
-            allowedHeaders: "*"
   security:
     oauth2:
        resourceserver:
@@ -66,7 +80,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: health, info, prometheus, metrics, httptrace
   metrics:
     tags:
       application: api-gateway
