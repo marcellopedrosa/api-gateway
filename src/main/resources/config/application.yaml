@@ -32,10 +32,10 @@ spring:
       httpclient:
         ssl:
           use-insecure-trust-manager: true
-      # default-filters:
-      #   - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-      #   - TokenRelay=
-      #   - SaveSession
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - TokenRelay=
+        - SaveSession
   security:
     oauth2:
        resourceserver:
