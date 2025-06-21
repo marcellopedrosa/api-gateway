@@ -18,23 +18,27 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    private static final String[] REFRESH_ROUTE = {"/actuator/gateway/refresh"};
+    private static final String[] PUBLIC_ROUTE = { "/get/**", 
+                                                   "/actuator/health", 
+                                                   "/actuator/info",
+                                                   "/actuator/prometheus",
+                                                   "/actuator/metrics",
+                                                   "/actuator/httptrace" };
 
     private static final String[] DISABLE_GATEWAY_ROUTES = {"/actuator/gateway/**"};
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(
             ServerHttpSecurity http, ServerOAuth2AuthorizationRequestResolver resolver) {
-        http.headers(c -> c.contentTypeOptions(ServerHttpSecurity.HeaderSpec.ContentTypeOptionsSpec::disable)
+        http.headers(headers -> headers
+                        .contentTypeOptions(ServerHttpSecurity.HeaderSpec.ContentTypeOptionsSpec::disable)
                         .frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable))
-                .authorizeExchange(auth -> auth.pathMatchers(REFRESH_ROUTE)
-                        .hasAuthority("SCOPE_admin_gateway")
-                        .pathMatchers(HttpMethod.DELETE, DISABLE_GATEWAY_ROUTES)
-                        .denyAll()
-                        .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES)
-                        .denyAll()
-                        .anyExchange()
-                        .permitAll())
+                .authorizeExchange(auth -> auth
+                        .pathMatchers(PUBLIC_ROUTE).permitAll()
+                        .pathMatchers("/**").hasAuthority("SCOPE_admin_gateway")
+                        .pathMatchers(HttpMethod.DELETE, DISABLE_GATEWAY_ROUTES).denyAll()
+                        .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES).denyAll()
+                        .anyExchange().denyAll())
                 .oauth2Login(withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         http.oauth2Login(withDefaults());
