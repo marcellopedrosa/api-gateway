@@ -40,3 +40,6 @@ Este projeto atua como o ponto de entrada da arquitetura de microsserviços, uti
 
 ![image](https://github.com/user-attachments/assets/9709cfd4-589e-4635-af38-13c973b11335)
 
+5. Acesse seu client (backend ou frontend) > Aba "Client scopes" > Clique em "Add client scope" > Selecione "admin_gateway" > Selecione Add opção "Default" > Done! 
+
+![image](https://github.com/user-attachments/assets/c3242216-287c-4bdd-b13e-722132779e4b)
