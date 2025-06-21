@@ -36,7 +36,7 @@ Este projeto atua como o ponto de entrada da arquitetura de microsserviços, uti
 
 ![image](https://github.com/user-attachments/assets/dd98d070-99b7-488c-9d9e-48f36fe33727)
 
-4. Preencha dessa forma para ficar igual ao que foi mapeado no seu Spring Security
+4. Preencha dessa forma para ficar igual ao que foi mapeado no seu Spring Security ![Ver Spring Security configurado](https://github.com/marcellopedrosa/api-gateway/blob/main/src/main/java/br/com/csc/api_gateway/configuration/SecurityConfig.java) 
 
 ![image](https://github.com/user-attachments/assets/9709cfd4-589e-4635-af38-13c973b11335)
 
