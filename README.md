@@ -21,3 +21,12 @@ Este projeto atua como o ponto de entrada da arquitetura de microsserviços, uti
 - Spring Boot 3.1+
 - Spring Cloud Gateway
 - Maven 3.9+
+
+## Configurações do SCOPE_admin_gateway no Keycloak
+
+1. Criar um Client Scope
+
+![image](https://github.com/user-attachments/assets/ab5b33f3-06a7-411b-8f19-5a4be1a482fc)
+
+
+2. 
