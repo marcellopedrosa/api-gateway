@@ -22,7 +22,7 @@ Este projeto atua como o ponto de entrada da arquitetura de microsserviços, uti
 - Spring Cloud Gateway
 - Maven 3.9+
 
-## Configurações do SCOPE_admin_gateway no Keycloak
+## Configurando Keycloak como Auth Server
 
 https://github.com/marcellopedrosa/api-gateway-with-keycloak/
 
