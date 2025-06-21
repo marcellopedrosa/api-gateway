@@ -43,3 +43,8 @@ Este projeto atua como o ponto de entrada da arquitetura de microsserviços, uti
 5. Acesse seu client (backend ou frontend) > Aba "Client scopes" > Clique em "Add client scope" > Selecione "admin_gateway" > Selecione Add opção "Default" > Done! 
 
 ![image](https://github.com/user-attachments/assets/c3242216-287c-4bdd-b13e-722132779e4b)
+
+6. Autentique-se no Keycloak > Acesse jwt.io > Verifique se o payload está como mostra a imagem:
+
+![image](https://github.com/user-attachments/assets/c6cd6d8b-2ddc-427e-b3f1-1439154b53c8)
+
