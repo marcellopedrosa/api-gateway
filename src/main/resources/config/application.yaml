@@ -9,6 +9,15 @@ spring:
       - dev
   cloud:
     gateway:
+      server:
+        webflux:
+          routes:
+          - id: teste
+            uri: https://httpbin.org
+            predicates:
+            - Path=/get
+            filters:
+            - AddRequestHeader=X-Test, SpringCloudGateway
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -24,15 +33,6 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-      server:
-        webflux:
-          routes:
-          - id: teste
-            uri: https://httpbin.org
-            predicates:
-            - Path=/get
-            filters:
-            - AddRequestHeader=X-Test, SpringCloudGateway
       x-forwarded:
         enabled: true
         host-enabled: true
@@ -64,7 +64,6 @@ spring:
           keycloak:
             issuer-uri: ${KEYCLOAK_URI_SERVER}
             user-name-attribute: preferred_username
-
 eureka:
   client:
     register-with-eureka: true
@@ -75,7 +74,7 @@ eureka:
 management:
   endpoint:
     gateway:
-      enabled: true
+      access: unrestricted
   endpoints:
     web:
       exposure:
