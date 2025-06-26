@@ -3,14 +3,19 @@
 ########################################################
 
 # @name authRequest@
-POST http://keykloak.empresa.com.br/auth/realms/meu-realm/protocol/openid-connect/token
+POST http://lab.fachesf.com.br:11111/auth/realms/fachesf-ad/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=client_credentials
-&client_id=meu-client
+&client_id=sgprev
 &client_secret=lklUeZGplGltFiVBvm2KvXgDz1nmWpRr
 
 ###########################################
-GET http://localhost:8080/actuator/gateway/routes
+GET http://localhost.com.br/gtw/actuator/gateway/routes
+Content-Type: application/json
+Authorization: Bearer {{authRequest.response.body.access_token}}
+
+###########################################
+GET http://localhost.com.br/gtw/get
 Content-Type: application/json
 Authorization: Bearer {{authRequest.response.body.access_token}}
