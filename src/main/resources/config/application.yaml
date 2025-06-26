@@ -9,6 +9,7 @@ spring:
       - dev
   cloud:
     gateway:
+      #base-path: gtw
       server:
         webflux:
           routes:
@@ -22,12 +23,12 @@ spring:
         corsConfigurations:
           '[/**]':
             allowedOriginPatterns: "*"
-            allowedMethods:
+            allowedMethods: "
               - GET
               - POST
               - PUT
               - DELETE
-              - OPTIONS
+              - OPTIONS"
             allowedHeaders: "*"
       discovery:
         locator:
