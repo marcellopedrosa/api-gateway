@@ -39,6 +39,7 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
+        <!-- Autoreload -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -86,6 +87,12 @@
             <artifactId>micrometer-tracing-bridge-otel</artifactId>
         </dependency>
 
+        <!-- comunicação com o graylog -->
+        <dependency>
+            <groupId>de.siegmar</groupId>
+            <artifactId>logback-gelf</artifactId>
+            <version>4.0.2</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
