@@ -93,6 +93,16 @@
             <artifactId>logback-gelf</artifactId>
             <version>4.0.2</version>
         </dependency>
+
+        <!-- OpenTelemetry -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin.reporter2</groupId>
+			<artifactId>zipkin-reporter-brave</artifactId>
+		</dependency>
     </dependencies>
 
     <dependencyManagement>
