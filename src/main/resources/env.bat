@@ -1,6 +1,9 @@
 @echo off
 echo Definindo variáveis de ambiente...
 
+setx SERVER_LOG_HOST "logs.fachesf.com.br" /M
+setx SERVER_LOG_PORT "12201" /M
+
 setx SPRING_CLOUD_EUREKA_HOST "http://localhost" /M
 setx SPRING_CLOUD_EUREKA_PORT "8761" /M
 setx SPRING_CLOUD_EUREKA_PATH "/eureka" /M

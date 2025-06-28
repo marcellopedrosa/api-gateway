@@ -36,9 +36,19 @@ public class LoggingConfig {
         encoder.setContext(loggerContext);
         encoder.start();
 
+        String graylogHost = System.getenv("SERVER_LOG_HOST");
+        if (graylogHost == null || graylogHost.isBlank()) {
+            throw new IllegalStateException("Variável de ambiente SERVER_LOG_HOST não definida.");
+        }
+        gelfAppender.setGraylogHost(graylogHost);
+
+        String graylogPort = System.getenv("SERVER_LOG_PORT");
+        if (graylogPort == null || graylogPort.isBlank()) {
+            throw new IllegalStateException("Variável de ambiente SERVER_LOG_PORT não definida.");
+        }
+        gelfAppender.setGraylogPort(Integer.parseInt(graylogPort));
+        
         gelfAppender.setContext(loggerContext);
-        gelfAppender.setGraylogHost("logs.fachesf.com.br");
-        gelfAppender.setGraylogPort(12201);
         gelfAppender.setEncoder(encoder);
         gelfAppender.start();
 
