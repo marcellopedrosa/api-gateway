@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: api-gateway
+  config:
+    import: optional:configserver:${CONFIG_SERVER}
   profiles:
     active:
       - dev
@@ -12,13 +14,10 @@ spring:
       #base-path: gtw
       server:
         webflux:
-          routes:
-          - id: teste
-            uri: https://httpbin.org
-            predicates:
-            - Path=/get
-            filters:
-            - AddRequestHeader=X-Test, SpringCloudGateway
+          discovery:
+            locator:
+            enabled: true
+            lower-case-service-id: true
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -31,16 +30,13 @@ spring:
               - OPTIONS"
             allowedHeaders: "*"
       discovery:
-        locator:
+        x-forwarded:
           enabled: true
-          lower-case-service-id: true
-      x-forwarded:
-        enabled: true
-        host-enabled: true
-        port-enabled: true
-        for-enabled: true
-        proto-enabled: true
-        prefix-enabled: true
+          host-enabled: true
+          port-enabled: true
+          for-enabled: true
+          proto-enabled: true
+          prefix-enabled: true
       httpclient:
         ssl:
           use-insecure-trust-manager: true
@@ -83,12 +79,16 @@ management:
     tracing:
       endpoint: ${ZIPKIN_URL}
   endpoint:
+    #gateway:
+      #access: unrestricted
     gateway:
-      access: unrestricted
+      enabled: true
+    refresh:
+      enabled: true
   endpoints:
     web:
       exposure:
-        include: health, info, prometheus, metrics, httptrace, gateway
+        include: "*" #health, info, prometheus, metrics, httptrace, gateway, refresh
   metrics:
     tags:
       application: api-gateway

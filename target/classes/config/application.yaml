@@ -1,0 +1,110 @@
+server:
+  forward-headers-strategy: FRAMEWORK
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    import: optional:configserver:${CONFIG_SERVER}
+  profiles:
+    active:
+      - dev
+  cloud:
+    gateway:
+      #base-path: gtw
+      server:
+        webflux:
+          discovery:
+            locator:
+            enabled: true
+            lower-case-service-id: true
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS"
+            allowedHeaders: "*"
+      discovery:
+        x-forwarded:
+          enabled: true
+          host-enabled: true
+          port-enabled: true
+          for-enabled: true
+          proto-enabled: true
+          prefix-enabled: true
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - TokenRelay=
+        - SaveSession
+  security:
+    oauth2:
+       resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URI_SERVER}
+       client:
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_API_GATEWAY_CLIENT_ID}
+            client-secret: ${KEYCLOAK_API_GATEWAY_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_URI_SERVER}
+            user-name-attribute: preferred_username
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${SPRING_CLOUD_EUREKA_HOST}:${SPRING_CLOUD_EUREKA_PORT}${SPRING_CLOUD_EUREKA_PATH}
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+    propagation:
+      type: b3
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL}
+  endpoint:
+    #gateway:
+      #access: unrestricted
+    gateway:
+      enabled: true
+    refresh:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*" #health, info, prometheus, metrics, httptrace, gateway, refresh
+  metrics:
+    tags:
+      application: api-gateway
+
+logging:
+  level:
+    '[org.springframework.cloud.gateway]': TRACE
+    '[org.springframework.http.server.reactive]': DEBUG
+    '[org.springframework.web.reactive]': DEBUG
+    '[org.springframework.boot.autoconfigure.web]': DEBUG
+    '[org.springframework.boot.context.logging]': TRACE
+    '[redisratelimiter]': DEBUG
+    '[reactor.ipc.netty]': DEBUG
+    '[reactor.netty]': DEBUG
+    '[reactor.netty.http.client]': DEBUG
+    '[org.springframework.security]': DEBUG
+    '[org.springframework.security.oauth2]': DEBUG
+    '[org.springframework.web.reactive.function.client]': TRACE
+    '[org.springframework.jdbc.core.JdbcTemplate]': DEBUG
