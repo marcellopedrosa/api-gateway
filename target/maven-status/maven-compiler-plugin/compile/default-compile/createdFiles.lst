@@ -1,0 +1,3 @@
+br\com\csc\api_gateway\GatewayServerApplication.class
+br\com\csc\api_gateway\configuration\SecurityConfig.class
+br\com\csc\api_gateway\configuration\LoggingConfig.class
