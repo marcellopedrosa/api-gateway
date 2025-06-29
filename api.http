@@ -6,7 +6,14 @@ grant_type=client_credentials
 &client_id=sgprev
 &client_secret=15cNOErHE0s2fZIBdZq0SdBa93YqXScf
 
-### 
+### Ativar a capacidade de atualizar as rotas sem reiniciar o Gateway, usando o endpoint:
+#POST http://localhost:8080/actuator/refresh
+POST http://localhost.com.br/gtw/actuator/refresh
+Content-Type: application/json
+Authorization: Bearer {{authRequest.response.body.access_token}}
+
+### Verificar as rotas depois refresh
+#GET http://localhost:8080/actuator/gateway/routes
 GET http://localhost.com.br/gtw/actuator/gateway/routes
 Content-Type: application/json
 Authorization: Bearer {{authRequest.response.body.access_token}}
@@ -15,8 +22,10 @@ Authorization: Bearer {{authRequest.response.body.access_token}}
 GET http://localhost.com.br/gtw/get
 Content-Type: application/json
 
-### Ativar a capacidade de atualizar as rotas sem reiniciar o Gateway, usando o endpoint:
-POST http://localhost.com.br/gtw/actuator/refresh
-Content-Type: application/json
+### Busca por profile do projeto no config-server no caso: api-gateway-dev.yml
+GET http://localhost:8888/api-gateway/dev
 Authorization: Bearer {{authRequest.response.body.access_token}}
 
+###
+GET http://localhost.com.br/gtw/actuator/env
+Authorization: Bearer {{authRequest.response.body.access_token}}

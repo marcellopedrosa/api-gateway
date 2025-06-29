@@ -23,12 +23,14 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_ROUTE = { "/get/**", 
+    private static final String[] PUBLIC_ROUTE = { "/**",
+                                                   "/get/**", 
                                                    "/actuator/health", 
                                                    "/actuator/info",
                                                    "/actuator/prometheus",
                                                    "/actuator/metrics",
-                                                   "/actuator/httptrace" };
+                                                   "/actuator/httptrace",
+                                                   "/actuator/refresh" };
 
     private static final String[] DISABLE_GATEWAY_ROUTES = {"/actuator/gateway/**"};
 
@@ -40,11 +42,11 @@ public class SecurityConfig {
                         .contentTypeOptions(ServerHttpSecurity.HeaderSpec.ContentTypeOptionsSpec::disable)
                         .frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable))
                 .authorizeExchange(auth -> auth
-                        .pathMatchers(PUBLIC_ROUTE).permitAll()
-                        .pathMatchers("/**").hasAuthority("SCOPE_admin_gateway")
-                        .pathMatchers(HttpMethod.DELETE, DISABLE_GATEWAY_ROUTES).denyAll()
-                        .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES).denyAll()
-                        .anyExchange().denyAll())
+                        .pathMatchers(PUBLIC_ROUTE).permitAll())
+                        // .pathMatchers("/**").hasAuthority("SCOPE_admin_gateway")
+                        // .pathMatchers(HttpMethod.DELETE, DISABLE_GATEWAY_ROUTES).denyAll()
+                        // .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES).denyAll()
+                        // .anyExchange().denyAll())
                 .oauth2Login(withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         http.oauth2Login(withDefaults());

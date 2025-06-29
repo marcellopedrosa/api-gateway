@@ -2,33 +2,35 @@ server:
   forward-headers-strategy: FRAMEWORK
 
 spring:
+  config:
+    import: optional:configserver:http://localhost:8888 #${CONFIG_SERVER}
   application:
     name: api-gateway
-  config:
-    import: optional:configserver:${CONFIG_SERVER}
   profiles:
     active:
-      - dev
+      - dev #se usar 'dev' deverá usar o config-server api-gateway-dev.yml
   cloud:
+    config:
+      fail-fast: true #se o config-server de erro, parar o api-gateway
     gateway:
-      #base-path: gtw
+      #base-path: gtw #no NGINX está definido como localhost://localhost:8080/ sem o /gtw
       server:
         webflux:
           discovery:
             locator:
             enabled: true
             lower-case-service-id: true
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOriginPatterns: "*"
-            allowedMethods: "
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS"
-            allowedHeaders: "*"
+      # globalcors:
+      #   corsConfigurations:
+      #     '[/**]':
+      #       allowedOriginPatterns: "*"
+      #       allowedMethods: "
+      #         - GET
+      #         - POST
+      #         - PUT
+      #         - DELETE
+      #         - OPTIONS"
+      #       allowedHeaders: "*"
       discovery:
         x-forwarded:
           enabled: true
@@ -79,12 +81,8 @@ management:
     tracing:
       endpoint: ${ZIPKIN_URL}
   endpoint:
-    #gateway:
-      #access: unrestricted
     gateway:
-      enabled: true
-    refresh:
-      enabled: true
+      access: unrestricted
   endpoints:
     web:
       exposure:
@@ -95,6 +93,8 @@ management:
 
 logging:
   level:
+    '[org.springframework.cloud.config]': DEBUG
+    '[org.springframework.boot.context.config]': DEBUG
     '[org.springframework.cloud.gateway]': TRACE
     '[org.springframework.http.server.reactive]': DEBUG
     '[org.springframework.web.reactive]': DEBUG
