@@ -81,12 +81,6 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 
-        <!--  Tracing distribuído - Use OpenTelemetry ou Zipkin/Jaeger com o spring-cloud-starter-sleuth. -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
-        </dependency>
-
         <!-- comunicação com o graylog -->
         <dependency>
             <groupId>de.siegmar</groupId>
