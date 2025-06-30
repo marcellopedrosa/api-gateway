@@ -1,25 +1,32 @@
 server:
+  port: 8080
   forward-headers-strategy: FRAMEWORK
 
 spring:
-  config:
-    import: optional:configserver:http://localhost:8888 #${CONFIG_SERVER}
   application:
     name: api-gateway
   profiles:
     active:
       - dev #se usar 'dev' deverá usar o config-server api-gateway-dev.yml
+  config:
+      import: optional:configserver:${CONFIG_SERVER:http://localhost:8888}
   cloud:
-    config:
-      fail-fast: true #se o config-server de erro, parar o api-gateway
     gateway:
-      #base-path: gtw #no NGINX está definido como localhost://localhost:8080/ sem o /gtw
       server:
         webflux:
-          discovery:
-            locator:
-            enabled: true
-            lower-case-service-id: true
+          enabled: true
+          trusted-proxiess: true
+      discovery:
+        locator:
+        enabled: true
+        lower-case-service-id: true
+      x-forwarded:
+        enabled: true
+        host-enabled: true
+        port-enabled: true
+        for-enabled: true
+        proto-enabled: true
+        prefix-enabled: true
       # globalcors:
       #   corsConfigurations:
       #     '[/**]':
@@ -31,14 +38,6 @@ spring:
       #         - DELETE
       #         - OPTIONS"
       #       allowedHeaders: "*"
-      discovery:
-        x-forwarded:
-          enabled: true
-          host-enabled: true
-          port-enabled: true
-          for-enabled: true
-          proto-enabled: true
-          prefix-enabled: true
       httpclient:
         ssl:
           use-insecure-trust-manager: true
@@ -50,18 +49,18 @@ spring:
     oauth2:
        resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_URI_SERVER}
+          issuer-uri: ${SPI_URI_SERVER}
        client:
         registration:
           keycloak:
-            client-id: ${KEYCLOAK_API_GATEWAY_CLIENT_ID}
-            client-secret: ${KEYCLOAK_API_GATEWAY_CLIENT_SECRET}
+            client-id: ${SPI_API_GATEWAY_CLIENT_ID}
+            client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             scope: openid, profile, email
             redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
         provider:
           keycloak:
-            issuer-uri: ${KEYCLOAK_URI_SERVER}
+            issuer-uri: ${SPI_URI_SERVER}
             user-name-attribute: preferred_username
 eureka:
   client:
