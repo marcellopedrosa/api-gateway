@@ -1,11 +1,7 @@
 @echo off
 echo Definindo variáveis de ambiente...
 
-setx CONFIG_SERVER "http://localhost:8888" /M
-setx CONFIG_SERVER_GIT_URI "http://localhost:8888" /M
-setx CONFIG_SERVER_GIT_SEARCH_PATHS "config" /M
-setx CONFIG_SERVER_GIT_USERNAME "admin" /M
-setx CONFIG_SERVER_GIT_PASSWORD "admin" /M
+setx CONFIG_SERVER_URI "http://localhost:8888" /M
 
 setx ZIPKIN_URL "http://lab.empresa.com.br:9411/api/v2/spans" /M
 setx SERVER_LOG_HOST "logs.empresa.com.br" /M

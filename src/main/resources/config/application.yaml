@@ -9,8 +9,13 @@ spring:
     active:
       - dev #se usar 'dev' deverá usar o config-server api-gateway-dev.yml
   config:
-      import: optional:configserver:${CONFIG_SERVER:http://localhost:8888}
+    import: optional:configserver:${CONFIG_SERVER_URI}
   cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI}
+      fail-fast: true
+      label: main
+      profile: dev
     gateway:
       server:
         webflux:
@@ -79,13 +84,15 @@ management:
   zipkin:
     tracing:
       endpoint: ${ZIPKIN_URL}
-  endpoint:
-    gateway:
-      access: unrestricted
   endpoints:
     web:
       exposure:
-        include: "*" #health, info, prometheus, metrics, httptrace, gateway, refresh
+        include: refresh, routes
+  endpoint:
+    refresh:
+      enabled: true
+    gateway:
+      access: unrestricted
   metrics:
     tags:
       application: api-gateway

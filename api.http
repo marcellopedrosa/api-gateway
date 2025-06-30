@@ -12,25 +12,13 @@ POST http://localhost.com.br/gtw/actuator/refresh
 Content-Type: application/json
 Authorization: Bearer {{authRequest.response.body.access_token}}
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### Verificar as rotas depois refresh
 GET http://localhost.com.br/gtw/actuator/gateway/routes
 Content-Type: application/json
 Authorization: Bearer {{authRequest.response.body.access_token}}
 
 ### 
-GET http://localhost.com.br/gtw/get
+GET http://localhost.com.br/gtw/teste/
 Content-Type: application/json
 
 ###
