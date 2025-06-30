@@ -23,8 +23,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_ROUTE = { "/**",
-                                                   "/get/**", 
+    private static final String[] PUBLIC_ROUTE = { "/teste/**", 
                                                    "/actuator/health", 
                                                    "/actuator/info",
                                                    "/actuator/prometheus",
@@ -41,12 +40,12 @@ public class SecurityConfig {
             .headers(headers -> headers
                         .contentTypeOptions(ServerHttpSecurity.HeaderSpec.ContentTypeOptionsSpec::disable)
                         .frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable))
-                .authorizeExchange(auth -> auth
-                        .pathMatchers(PUBLIC_ROUTE).permitAll())
-                        // .pathMatchers("/**").hasAuthority("SCOPE_admin_gateway")
+                .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers(PUBLIC_ROUTE).permitAll()
+                        .pathMatchers("/**").hasAuthority("SCOPE_admin_gateway")
                         // .pathMatchers(HttpMethod.DELETE, DISABLE_GATEWAY_ROUTES).denyAll()
                         // .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES).denyAll()
-                        // .anyExchange().denyAll())
+                        .anyExchange().denyAll())
                 .oauth2Login(withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         http.oauth2Login(withDefaults());
