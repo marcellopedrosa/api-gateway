@@ -43,8 +43,8 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(PUBLIC_ROUTE).permitAll()
                         .pathMatchers("/**").hasAuthority("SCOPE_admin_gateway")
-                        // .pathMatchers(HttpMethod.DELETE, DISABLE_GATEWAY_ROUTES).denyAll()
-                        // .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES).denyAll()
+                        .pathMatchers(HttpMethod.DELETE, DISABLE_GATEWAY_ROUTES).denyAll()
+                        .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES).denyAll()
                         .anyExchange().denyAll())
                 .oauth2Login(withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
