@@ -53,8 +53,8 @@ spring:
   security:
     oauth2:
        resourceserver:
-        jwt:
-          issuer-uri: ${SPI_URI_SERVER}
+        #jwt:
+          #issuer-uri: ${SPI_URI_SERVER}
        client:
         registration:
           keycloak:
@@ -97,20 +97,20 @@ management:
     tags:
       application: api-gateway
 
-logging:
-  level:
-    '[org.springframework.cloud.config]': DEBUG
-    '[org.springframework.boot.context.config]': DEBUG
-    '[org.springframework.cloud.gateway]': TRACE
-    '[org.springframework.http.server.reactive]': DEBUG
-    '[org.springframework.web.reactive]': DEBUG
-    '[org.springframework.boot.autoconfigure.web]': DEBUG
-    '[org.springframework.boot.context.logging]': TRACE
-    '[redisratelimiter]': DEBUG
-    '[reactor.ipc.netty]': DEBUG
-    '[reactor.netty]': DEBUG
-    '[reactor.netty.http.client]': DEBUG
-    '[org.springframework.security]': DEBUG
-    '[org.springframework.security.oauth2]': DEBUG
-    '[org.springframework.web.reactive.function.client]': TRACE
-    '[org.springframework.jdbc.core.JdbcTemplate]': DEBUG
+# logging:
+#   level:
+#     '[org.springframework.cloud.config]': DEBUG
+#     '[org.springframework.boot.context.config]': DEBUG
+#     '[org.springframework.cloud.gateway]': TRACE
+#     '[org.springframework.http.server.reactive]': DEBUG
+#     '[org.springframework.web.reactive]': DEBUG
+#     '[org.springframework.boot.autoconfigure.web]': DEBUG
+#     '[org.springframework.boot.context.logging]': TRACE
+#     '[redisratelimiter]': DEBUG
+#     '[reactor.ipc.netty]': DEBUG
+#     '[reactor.netty]': DEBUG
+#     '[reactor.netty.http.client]': DEBUG
+#     '[org.springframework.security]': DEBUG
+#     '[org.springframework.security.oauth2]': DEBUG
+#     '[org.springframework.web.reactive.function.client]': TRACE
+#     '[org.springframework.jdbc.core.JdbcTemplate]': DEBUG

@@ -8,12 +8,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers;
 import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
@@ -33,11 +36,16 @@ public class SecurityConfig {
 
     private static final String[] DISABLE_GATEWAY_ROUTES = {"/actuator/gateway/**"};
 
+    // ############# v2 #############
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(
-            ServerHttpSecurity http, ServerOAuth2AuthorizationRequestResolver resolver) {
-        http.cors(Customizer.withDefaults())
-            .headers(headers -> headers
+            ServerHttpSecurity http,
+            ServerOAuth2AuthorizationRequestResolver resolver,
+            DynamicReactiveJwtDecoderResolver jwtDecoderResolver) {
+
+        http
+                .cors(Customizer.withDefaults())
+                .headers(headers -> headers
                         .contentTypeOptions(ServerHttpSecurity.HeaderSpec.ContentTypeOptionsSpec::disable)
                         .frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable))
                 .authorizeExchange(exchanges -> exchanges
@@ -47,11 +55,35 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES).denyAll()
                         .anyExchange().denyAll())
                 .oauth2Login(withDefaults())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
-        http.oauth2Login(withDefaults());
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtDecoder(jwtDecoderResolver::decodeV1)) 
+                );
+
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
+
         return http.build();
     }
+
+    // ############# v1 #############
+    // @Bean
+    // public SecurityWebFilterChain springSecurityFilterChain(
+    //         ServerHttpSecurity http, ServerOAuth2AuthorizationRequestResolver resolver) {
+    //     http.cors(Customizer.withDefaults())
+    //         .headers(headers -> headers
+    //                     .contentTypeOptions(ServerHttpSecurity.HeaderSpec.ContentTypeOptionsSpec::disable)
+    //                     .frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable))
+    //             .authorizeExchange(exchanges -> exchanges
+    //                     .pathMatchers(PUBLIC_ROUTE).permitAll()
+    //                     .pathMatchers("/**").hasAuthority("SCOPE_admin_gateway")
+    //                     .pathMatchers(HttpMethod.DELETE, DISABLE_GATEWAY_ROUTES).denyAll()
+    //                     .pathMatchers(HttpMethod.POST, DISABLE_GATEWAY_ROUTES).denyAll()
+    //                     .anyExchange().denyAll())
+    //             .oauth2Login(withDefaults())
+    //             .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+    //     http.oauth2Login(withDefaults());
+    //     http.csrf(ServerHttpSecurity.CsrfSpec::disable);
+    //     return http.build();
+    //}
 
     @Bean
     public ServerOAuth2AuthorizationRequestResolver pkceResolver(ReactiveClientRegistrationRepository repo) {

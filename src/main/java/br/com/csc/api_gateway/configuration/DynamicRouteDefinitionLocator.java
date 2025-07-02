@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 
 import reactor.core.publisher.Flux;
 
+/**
+ * Force refresh routes manually
+ */
 @RefreshScope
 @Component
 public class DynamicRouteDefinitionLocator implements RouteDefinitionLocator {
