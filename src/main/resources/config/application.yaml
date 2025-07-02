@@ -52,7 +52,7 @@ spring:
         - SaveSession
   security:
     oauth2:
-       resourceserver:
+       #resourceserver:
         #jwt:
           #issuer-uri: ${SPI_URI_SERVER}
        client:
