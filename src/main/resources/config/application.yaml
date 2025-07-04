@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${GATEWAY_PORT_QA}
   forward-headers-strategy: FRAMEWORK
 
 spring:
@@ -9,14 +9,21 @@ spring:
     active:
       - dev #se usar 'dev' deverá usar o config-server api-gateway-dev.yml
   config:
-    import: optional:configserver:${CONFIG_SERVER_URI}
+    import: optional:configserver:${CONFIG_SERVER_URI_QA}
   cloud:
     config:
-      uri: ${CONFIG_SERVER_URI}
+      uri: ${CONFIG_SERVER_URI_QA}
       fail-fast: true
       label: main
       profile: dev
     gateway:
+      #httpclient: #Resiliencia e Desempenho (PRD)
+        #connect-timeout: 5000
+        #response-timeout: 10s
+      #loadbalancer:
+        #cache:
+          #caffeine:
+          #spec: maximumSize=500,expireAfterAccess=600s
       server:
         webflux:
           enabled: true
@@ -54,25 +61,25 @@ spring:
     oauth2:
        #resourceserver:
         #jwt:
-          #issuer-uri: ${SPI_URI_SERVER}
+          #issuer-uri: ${SPI_URI_SERVER_QA}
        client:
         registration:
           keycloak:
-            client-id: ${SPI_API_GATEWAY_CLIENT_ID}
-            client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET}
+            client-id: ${SPI_API_GATEWAY_CLIENT_ID_QA}
+            client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET_QA}
             authorization-grant-type: authorization_code
             scope: openid, profile, email
-            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
         provider:
           keycloak:
-            issuer-uri: ${SPI_URI_SERVER}
+            issuer-uri: ${SPI_URI_SERVER_QA}
             user-name-attribute: preferred_username
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: ${SPRING_CLOUD_EUREKA_HOST}:${SPRING_CLOUD_EUREKA_PORT}${SPRING_CLOUD_EUREKA_PATH}
+      defaultZone: ${SPRING_CLOUD_EUREKA_HOST_QA}:${SPRING_CLOUD_EUREKA_PORT_QA}${SPRING_CLOUD_EUREKA_PATH_QA}
 
 management:
   tracing:
@@ -83,7 +90,7 @@ management:
       type: b3
   zipkin:
     tracing:
-      endpoint: ${ZIPKIN_URL}
+      endpoint: ${ZIPKIN_URL_QA}
   endpoints:
     web:
       exposure:
