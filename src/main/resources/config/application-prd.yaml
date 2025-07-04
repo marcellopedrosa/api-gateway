@@ -1,27 +1,123 @@
+server:
+  port: ${GATEWAY_PORT}
+  forward-headers-strategy: FRAMEWORK
+
 spring:
+  application:
+    name: api-gateway
+  profiles:
+    active:
+      - prd #se usar 'dev' deverá usar o config-server api-gateway-dev.yml
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URI}
   cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI}
+      fail-fast: true
+      label: main
+      profile: prd
     gateway:
-      httpclient: #Resiliencia e Desempenho
+      httpclient: #Resiliencia e Desempenho (PRD)
         connect-timeout: 5000
         response-timeout: 10s
-    loadbalancer:
-      cache:
-        caffeine:
+      loadbalancer:
+        cache:
+          caffeine:
           spec: maximumSize=500,expireAfterAccess=600s
+      server:
+        webflux:
+          enabled: true
+          trusted-proxiess: true
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      x-forwarded:
+        enabled: true
+        host-enabled: true
+        port-enabled: true
+        for-enabled: true
+        proto-enabled: true
+        prefix-enabled: true
+      # globalcors:
+      #   corsConfigurations:
+      #     '[/**]':
+      #       allowedOriginPatterns: "*"
+      #       allowedMethods: "
+      #         - GET
+      #         - POST
+      #         - PUT
+      #         - DELETE
+      #         - OPTIONS"
+      #       allowedHeaders: "*"
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - TokenRelay=
+        - SaveSession
+  security:
+    oauth2:
+       #resourceserver:
+        #jwt:
+          #issuer-uri: ${SPI_URI_SERVER}
+       client:
+        registration:
+          keycloak:
+            client-id: ${SPI_API_GATEWAY_CLIENT_ID}
+            client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          keycloak:
+            issuer-uri: ${SPI_URI_SERVER}
+            user-name-attribute: preferred_username
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${SPRING_CLOUD_EUREKA_HOST}:${SPRING_CLOUD_EUREKA_PORT}${SPRING_CLOUD_EUREKA_PATH}
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+    propagation:
+      type: b3
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL}
+  endpoints:
+    web:
+      exposure:
+        include: refresh, routes
+  endpoint:
+    refresh:
+      enabled: true
+    gateway:
+      access: unrestricted
+  metrics:
+    tags:
+      application: api-gateway
 
 # logging:
 #   level:
-#     root: WARN
-#     '[org.springframework.cloud.gateway]': WARN
-#     '[org.springframework.http.server.reactive]': ERROR
-#     '[org.springframework.web.reactive]': ERROR
-#     '[org.springframework.boot.autoconfigure.web]': ERROR
-#     '[org.springframework.boot.context.logging]': WARN
-#     '[redisratelimiter]': ERROR
-#     '[reactor.ipc.netty]': WARN
-#     '[reactor.netty]': WARN
-#     '[reactor.netty.http.client]': WARN
-#     '[org.springframework.security]': WARN
-#     '[org.springframework.security.oauth2]': ERROR
-#     '[org.springframework.web.reactive.function.client]': ERROR
-#     '[org.springframework.jdbc.core.JdbcTemplate]': ERROR
+#     '[org.springframework.cloud.config]': DEBUG
+#     '[org.springframework.boot.context.config]': DEBUG
+#     '[org.springframework.cloud.gateway]': TRACE
+#     '[org.springframework.http.server.reactive]': DEBUG
+#     '[org.springframework.web.reactive]': DEBUG
+#     '[org.springframework.boot.autoconfigure.web]': DEBUG
+#     '[org.springframework.boot.context.logging]': TRACE
+#     '[redisratelimiter]': DEBUG
+#     '[reactor.ipc.netty]': DEBUG
+#     '[reactor.netty]': DEBUG
+#     '[reactor.netty.http.client]': DEBUG
+#     '[org.springframework.security]': DEBUG
+#     '[org.springframework.security.oauth2]': DEBUG
+#     '[org.springframework.web.reactive.function.client]': TRACE
+#     '[org.springframework.jdbc.core.JdbcTemplate]': DEBUG

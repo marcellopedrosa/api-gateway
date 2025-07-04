@@ -1,19 +1,26 @@
 package br.com.csc.api_gateway.configuration;
 
-import com.nimbusds.jwt.SignedJWT;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.core.*;
-import org.springframework.security.oauth2.jwt.*;
-import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
-
 import java.text.ParseException;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
+import org.springframework.stereotype.Component;
+
+import com.nimbusds.jwt.SignedJWT;
+
+import reactor.core.publisher.Mono;
+
 /**
- * Resolves and validates JWT tokens dynamically based on the issuer.
- * It uses a cache to store decoders for each issuer and validates the issuer against allowed values
+ * Resolve e valida tokens JWT dinamicamente com base no emissor.
+ * Utiliza um cache para armazenar decodificadores para cada emissor e valida o emissor com base em valores permitidos.
  */
 @Component
 public class DynamicReactiveJwtDecoderResolver {
@@ -22,10 +29,9 @@ public class DynamicReactiveJwtDecoderResolver {
     private final Set<String> allowedIssuers;
 
     public DynamicReactiveJwtDecoderResolver(
-            @Value("${SPI_URI_SERVER}") String issuer1
-            /*,@Value("${SPI_URI_SERVER_QA}") String issuer2*/) {
-        //this.allowedIssuers = Set.of(issuer1, issuer2);
-        this.allowedIssuers = Set.of(issuer1);
+            @Value("${SPI_URI_SERVER}") String issuer1,
+            @Value("${SPI_URI_SERVER_QA}") String issuer2) {
+        this.allowedIssuers = Set.of(issuer1, issuer2);
     }
 
     /**
@@ -73,6 +79,7 @@ public class DynamicReactiveJwtDecoderResolver {
      * @param token
      * @return
      */
+    @Deprecated
     public Mono<Jwt> decodeV1(String token) {
         try {
             // Extrai o issuer do token (sem validar assinatura ainda)
