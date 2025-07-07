@@ -97,8 +97,6 @@ management:
         include: refresh, routes
   endpoint:
     refresh:
-      enabled: true
-    gateway:
       access: unrestricted
   metrics:
     tags:
