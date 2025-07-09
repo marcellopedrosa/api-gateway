@@ -11,7 +11,7 @@ setx SERVER_LOG_HOST "logs.empresa.com.br" /M
 setx SERVER_LOG_PORT "12201" /M
 
 setx SPI_REALM "empresa-ad" /M
-setx SPI_API_GATEWAY_CLIENT_ID "admin-service" /M
+setx SPI_API_GATEWAY_CLIENT_ID "api-gateway" /M
 setx SPI_API_GATEWAY_CLIENT_SECRET "01n2ug8OELqcP77NH0KoLzSCMc06OkwG" /M
 setx SPI_URI_SERVER "http://localhost.com.br/auth/realms/empresa-ad" /M
 
