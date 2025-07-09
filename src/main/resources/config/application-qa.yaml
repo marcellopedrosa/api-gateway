@@ -65,7 +65,7 @@ spring:
        client:
         registration:
           keycloak:
-            client-id: ${SPI_API_GATEWAY_CLIENT_ID_QA}
+            client-id: ${SPI_API_GATEWAY_CLIENT_ID}
             client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET_QA}
             authorization-grant-type: authorization_code
             scope: openid, profile, email
