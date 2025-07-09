@@ -1,29 +1,18 @@
 server:
-  port: ${GATEWAY_PORT_QA}
+  port: ${GATEWAY_PORT_DEV}
   forward-headers-strategy: FRAMEWORK
 
 spring:
   application:
     name: api-gateway
-  profiles:
-    active:
-      - dev #se usar 'dev' deverá usar o config-server api-gateway-dev.yml
   config:
-    import: optional:configserver:${CONFIG_SERVER_URI_QA}
+    import: optional:configserver:${CONFIG_SERVER_URI_DEV}
   cloud:
     config:
-      uri: ${CONFIG_SERVER_URI_QA}
+      uri: ${CONFIG_SERVER_URI_DEV}
       fail-fast: true
       label: main
-      profile: dev
     gateway:
-      #httpclient: #Resiliencia e Desempenho (PRD)
-        #connect-timeout: 5000
-        #response-timeout: 10s
-      #loadbalancer:
-        #cache:
-          #caffeine:
-          #spec: maximumSize=500,expireAfterAccess=600s
       server:
         webflux:
           enabled: true
@@ -39,47 +28,53 @@ spring:
         for-enabled: true
         proto-enabled: true
         prefix-enabled: true
-      # globalcors:
-      #   corsConfigurations:
-      #     '[/**]':
-      #       allowedOriginPatterns: "*"
-      #       allowedMethods: "
-      #         - GET
-      #         - POST
-      #         - PUT
-      #         - DELETE
-      #         - OPTIONS"
-      #       allowedHeaders: "*"
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS"
+            allowedHeaders: "*"
       httpclient:
+        connect-timeout: 5000
+        response-timeout: 10s
         ssl:
           use-insecure-trust-manager: true
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - TokenRelay=
         - SaveSession
+      loadbalancer:
+        cache:
+          caffeine:
+          spec: maximumSize=500,expireAfterAccess=600s
   security:
     oauth2:
        #resourceserver:
         #jwt:
-          #issuer-uri: ${SPI_URI_SERVER_QA}
+          #issuer-uri: ${SPI_URI_SERVER_DEV}
        client:
         registration:
           keycloak:
             client-id: ${SPI_API_GATEWAY_CLIENT_ID}
-            client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET_QA}
+            client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET_DEV}
             authorization-grant-type: authorization_code
             scope: openid, profile, email
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
         provider:
           keycloak:
-            issuer-uri: ${SPI_URI_SERVER_QA}
+            issuer-uri: ${SPI_URI_SERVER_DEV}
             user-name-attribute: preferred_username
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: ${SPRING_CLOUD_EUREKA_HOST_QA}:${SPRING_CLOUD_EUREKA_PORT_QA}${SPRING_CLOUD_EUREKA_PATH_QA}
+      defaultZone: ${SPRING_CLOUD_EUREKA_HOST_DEV}:${SPRING_CLOUD_EUREKA_PORT_DEV}${SPRING_CLOUD_EUREKA_PATH_DEV}
 
 management:
   tracing:
@@ -90,11 +85,11 @@ management:
       type: b3
   zipkin:
     tracing:
-      endpoint: ${ZIPKIN_URL_QA}
+      endpoint: ${ZIPKIN_URL_DEV}
   endpoints:
     web:
       exposure:
-        include: refresh, routes
+        include: "*"
   endpoint:
     refresh:
       access: unrestricted
