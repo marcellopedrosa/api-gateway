@@ -1,5 +1,5 @@
 # @name authRequest
-POST http://localhost.com.br/auth/realms/fachesf-ad/protocol/openid-connect/token
+POST http://localhost/auth/realms/fachesf-ad/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=client_credentials
@@ -8,19 +8,20 @@ grant_type=client_credentials
 
 ### Ativar a capacidade de atualizar as rotas sem reiniciar o Gateway, usando o endpoint:
 #POST http://localhost:8080/actuator/refresh
-POST http://localhost.com.br/gtw/actuator/refresh
+POST http://localhost/gtw/actuator/refresh
 Content-Type: application/json
 Authorization: Bearer {{authRequest.response.body.access_token}}
 
 ### Verificar as rotas depois refresh
-GET http://localhost.com.br/gtw/actuator/gateway/routes
+#GET http://localhost/gtw/actuator/gateway/routes
+GET http://localhost:8080/actuator/gateway/routes
 Content-Type: application/json
 Authorization: Bearer {{authRequest.response.body.access_token}}
 
 ### 
-GET http://localhost.com.br/gtw/teste/
+GET http://localhost/gtw/teste/
 Content-Type: application/json
 
 ###
-GET http://localhost.com.br/gtw/actuator/env
+GET http://localhost/gtw/actuator/env
 Authorization: Bearer {{authRequest.response.body.access_token}}

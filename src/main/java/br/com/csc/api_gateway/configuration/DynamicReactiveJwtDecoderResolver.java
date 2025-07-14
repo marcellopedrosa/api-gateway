@@ -29,9 +29,12 @@ public class DynamicReactiveJwtDecoderResolver {
     private final Set<String> allowedIssuers;
 
     public DynamicReactiveJwtDecoderResolver(
-            @Value("${SPI_URI_SERVER}") String issuer1,
-            @Value("${SPI_URI_SERVER_QA}") String issuer2) {
-        this.allowedIssuers = Set.of(issuer1, issuer2);
+            @Value("${SPI_URI_SERVER_DEV}") String issuer1
+            //,@Value("${SPI_URI_SERVER_HML}") String issuer2
+            //,@Value("${SPI_URI_SERVER_PRD}") String issuer3
+    ) {
+        this.allowedIssuers = Set.of(issuer1);
+        //this.allowedIssuers = Set.of(issuer1, issuer2,issuer3);
     }
 
     /**
