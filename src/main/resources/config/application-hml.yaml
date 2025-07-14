@@ -6,10 +6,10 @@ spring:
   application:
     name: api-gateway
   config:
-    import: optional:configserver:${CONFIG_SERVER_URI_DEV}
+    import: optional:configserver:${CONFIG_SERVER_URI_HML}
   cloud:
     config:
-      uri: ${CONFIG_SERVER_URI_DEV}
+      uri: ${CONFIG_SERVER_URI_HML}
       fail-fast: true
       label: main
     gateway:
@@ -56,25 +56,25 @@ spring:
     oauth2:
        #resourceserver:
         #jwt:
-          #issuer-uri: ${SPI_URI_SERVER_DEV}
+          #issuer-uri: ${SPI_URI_SERVER_HML}
        client:
         registration:
           keycloak:
             client-id: ${SPI_API_GATEWAY_CLIENT_ID}
-            client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET_DEV}
+            client-secret: ${SPI_API_GATEWAY_CLIENT_SECRET_HML}
             authorization-grant-type: authorization_code
             scope: openid, profile, email
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
         provider:
           keycloak:
-            issuer-uri: ${SPI_URI_SERVER_DEV}
+            issuer-uri: ${SPI_URI_SERVER_HML}
             user-name-attribute: preferred_username
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: ${SPRING_CLOUD_EUREKA_HOST_DEV}:${SPRING_CLOUD_EUREKA_PORT_DEV}${SPRING_CLOUD_EUREKA_PATH_DEV}
+      defaultZone: ${SPRING_CLOUD_EUREKA_HOST_HML}:${SPRING_CLOUD_EUREKA_PORT_HML}${SPRING_CLOUD_EUREKA_PATH_HML}
 
 management:
   tracing:
@@ -85,7 +85,7 @@ management:
       type: b3
   zipkin:
     tracing:
-      endpoint: ${ZIPKIN_URL_DEV}
+      endpoint: ${ZIPKIN_URL_HML}
   endpoints:
     web:
       exposure:
